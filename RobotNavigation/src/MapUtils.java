@@ -99,9 +99,22 @@ public class MapUtils {
         return retval;
     }
 
-    private static double getEuclideanDistance(State state1, State state2) {
-        return Math.sqrt(Math.pow((state2.x - state1.x), 2)
-                + Math.pow((state2.y - state1.y), 2));
+    private static double getManhattanDistance(State state1, State state2) {
+        return Math.abs(state1.x - state2.x) + Math.abs(state1.x - state2.y);
+    }
+
+    public static State getLowestMDistanceState(ArrayList<State> states, State goalState) {
+        State minstate = null;
+        double minDistance = 999;
+        for(State state : states) {
+            double distance = getManhattanDistance(state, goalState);
+            if(distance < minDistance) {
+                minstate = state;
+                minDistance = distance;
+            }
+        }
+
+        return minstate;
     }
 
     public static State getLowestEDistanceState(ArrayList<State> states, State goalState) {
@@ -116,5 +129,10 @@ public class MapUtils {
         }
 
         return minstate;
+    }
+
+    private static double getEuclideanDistance(State state1, State state2) {
+        return Math.sqrt(Math.pow((state2.x - state1.x), 2)
+                + Math.pow((state2.y - state1.y), 2));
     }
 }

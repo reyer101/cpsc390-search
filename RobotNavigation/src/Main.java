@@ -4,6 +4,7 @@ public class Main {
         char[][] map = MapUtils.getMapFromFile("test.txt");
 
         PathFinder pathFinder = new PathFinder(map);
-        pathFinder.findEPath();
+        //pathFinder.findEPath();
+        pathFinder.findMPath();
     }
 }

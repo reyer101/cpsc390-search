@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 public class PathFinder {
     char[][] pathMap;
@@ -44,9 +43,43 @@ public class PathFinder {
 
             // find neighbor with lowest Euclidean distance from goal
             currentState = MapUtils.getLowestEDistanceState(neighbors, goalState);
+            visited.add(currentState);
             ++pathCost;
         }
 
+        // output resulting path information
+        MapUtils.outputMap(pathMap);
+        System.out.print("\nPath cost: " + pathCost + "\nSearch tree size: " + searchTree.size());
+    }
+
+    public void findMPath() {
+        ArrayList<State> neighbors = new ArrayList<>();
+        ArrayList<State> visited = new ArrayList<>();
+        HashSet<State> searchTree = new HashSet<>();
+
+        int pathCost = 0;
+
+        searchTree.add(startState);
+        visited.add(startState);
+
+        State currentState = startState;
+
+        while(!currentState.equals(goalState)) {
+            if(currentState != startState) {
+                pathMap[currentState.x][currentState.y] = 'o';
+            }
+
+            neighbors = MapUtils.getValidNeighbors(currentState, pathMap);
+            searchTree.addAll(neighbors);
+
+            neighbors.removeAll(visited);
+
+            currentState = MapUtils.getLowestMDistanceState(neighbors, goalState);
+            visited.add(currentState);
+            ++pathCost;
+        }
+
+        // output resulting path information
         MapUtils.outputMap(pathMap);
         System.out.print("\nPath cost: " + pathCost + "\nSearch tree size: " + searchTree.size());
     }

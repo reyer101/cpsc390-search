@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MapUtils {
+    public enum Distance {
+        MANHATTAN,
+        EUCLIDEAN
+    }
 
     public static char[][] getMapFromFile(String file) {
         char[][] mapGrid = new char[0][0];

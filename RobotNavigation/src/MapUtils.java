@@ -3,6 +3,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class MapUtils {
     public enum Distance {
@@ -85,54 +87,65 @@ public class MapUtils {
         int j = state.y;
 
         if( j - 1 >= 0 && map[i][j-1] != '+') {
-            retval.add(new State(i, j-1));
+            retval.add(new State(i, j-1, state.pathCost + 1, state));
         }
 
         if( j + 1 <= map.length -1 && map[i][j+1] != '+') {
-            retval.add(new State(i, j+1));
+            retval.add(new State(i, j+1, state.pathCost + 1, state));
         }
 
         if( i - 1 >= 0 && map[i-1][j] != '+') {
-            retval.add(new State(i-1, j));
+            retval.add(new State(i-1, j, state.pathCost + 1, state));
         }
 
         if( i + 1 <= map.length -1 && map[i+1][j] != '+') {
-            retval.add(new State(i + 1, j));
+            retval.add(new State(i + 1, j, state.pathCost + 1, state));
         }
 
         return retval;
     }
 
+    public static State getLowestCostState(Collection<State> states,
+            State goalState, Distance distance) {
+        State minstate = null;
+        double cost = 0, minCost = 999;
+        for(State state : states) {
+            // evaluation function g(n) + h(n)
+            if(distance == Distance.MANHATTAN) {
+                cost = state.pathCost + getManhattanDistance(state, goalState);
+            } else {
+                cost = state.pathCost + getEuclideanDistance(state, goalState);
+            }
+
+            if(cost < minCost) {
+                minstate = state;
+                minCost = cost;
+            }
+        }
+
+        return minstate;
+    }
+
+    public static State getLowestDistanceState(Collection<State> states, State goalState, Distance d) {
+        State minstate = null;
+        double distance, minDistance = 999;
+        for(State state : states) {
+            if(d == Distance.MANHATTAN) {
+                distance = getManhattanDistance(state, goalState);
+            } else {
+                distance = getEuclideanDistance(state, goalState);
+            }
+            if(distance < minDistance) {
+                minstate = state;
+                minDistance = distance;
+            }
+        }
+
+        return minstate;
+    }
+
     private static double getManhattanDistance(State state1, State state2) {
         return Math.abs(state1.x - state2.x) + Math.abs(state1.x - state2.y);
-    }
-
-    public static State getLowestMDistanceState(ArrayList<State> states, State goalState) {
-        State minstate = null;
-        double minDistance = 999;
-        for(State state : states) {
-            double distance = getManhattanDistance(state, goalState);
-            if(distance < minDistance) {
-                minstate = state;
-                minDistance = distance;
-            }
-        }
-
-        return minstate;
-    }
-
-    public static State getLowestEDistanceState(ArrayList<State> states, State goalState) {
-        State minstate = null;
-        double minDistance = 999;
-        for(State state : states) {
-            double distance = getEuclideanDistance(state, goalState);
-            if(distance < minDistance) {
-                minstate = state;
-                minDistance = distance;
-            }
-        }
-
-        return minstate;
     }
 
     private static double getEuclideanDistance(State state1, State state2) {

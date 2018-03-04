@@ -1,9 +1,19 @@
 public class State {
-    public int x, y;
+    public int x, y, pathCost;
+    public State parent;
 
     public State(int _x, int _y) {
         x = _x;
         y = _y;
+        pathCost = 0;
+        parent = null;
+    }
+
+    public State(int _x, int _y, int cost, State parentState) {
+        x = _x;
+        y = _y;
+        pathCost = cost;
+        parent = parentState;
     }
 
     @Override

@@ -2,13 +2,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class PathFinder {
-    char[][] pathMap;
+    String fileName;
     State startState, goalState;
 
-    public PathFinder(char[][] map) {
-        pathMap = map;
-        startState = MapUtils.getStartState(map);
-        goalState = MapUtils.getGoalState(map);
+    public PathFinder(String file) {
+        fileName = file;
     }
 
     public void findPath(MapUtils.Distance distance, boolean usePathCost) {
@@ -16,6 +14,15 @@ public class PathFinder {
         ArrayList<State> visited = new ArrayList<>();
         HashSet<State> searchTree = new HashSet<>();
         HashSet<State> frontier = new HashSet<>();
+
+        char[][] pathMap = MapUtils.getMapFromFile(fileName);
+
+        State startState = MapUtils.getStartState(pathMap);
+        State goalState = MapUtils.getGoalState(pathMap);
+
+        if(pathMap.length < 1) {
+            return;
+        }
 
         int pathCost = 0;
 
@@ -53,6 +60,6 @@ public class PathFinder {
 
         // output resulting path information
         MapUtils.outputMap(pathMap);
-        System.out.print("\nPath cost: " + pathCost + "\nSearch tree size: " + searchTree.size());
+        System.out.print("\nPath cost: " + pathCost + "\nSearch tree size: " + searchTree.size() + '\n');
     }
 }

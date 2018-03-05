@@ -46,6 +46,7 @@ public class MapUtils {
     }
 
     public static void outputMap(char[][] map) {
+        System.out.println();
         for(int i = 0; i < map.length; ++i) {
             for(int j = 0; j < map.length; ++j) {
                 if(j == map.length - 1) {
